@@ -1,3 +1,38 @@
+-- Polyfill for 'task' (for older executors)
+if not task then
+    task = {
+        spawn = spawn or function(f) coroutine.resume(coroutine.create(f)) end,
+        wait = wait,
+        delay = delay,
+        cancel = function() end,
+    }
+end
+
+-- Polyfill for file system functions (if missing, just do nothing)
+if not writefile then writefile = function() end end
+if not readfile then readfile = function() return "" end end
+if not isfile then isfile = function() return false end end
+if not getcustomasset then getcustomasset = function(path) return path end end
+
+-- Polyfill for syn / http functions
+if not syn then syn = {} end
+if not syn.request then syn.request = function(...) return {Body = ""} end end
+if not http_request then http_request = function(...) return {Body = ""} end end
+if not request then request = function(...) return {Body = ""} end end
+
+-- Polyfill for getconnections (if missing, just return empty table)
+if not getconnections then getconnections = function() return {} end end
+
+-- Polyfill for fireproximityprompt
+if not fireproximityprompt then fireproximityprompt = function() end end
+
+-- Polyfill for hookfunction / newcclosure
+if not hookfunction then hookfunction = function(a,b) return a end end
+if not newcclosure then newcclosure = function(f) return f end end
+
+-- Ensure Font exists (for custom font)
+if not Font then Font = {} end
+if not Font.new then Font.new = function() return {} end end
 local Players,RunService,UIS,TS,Lighting,HS = game:GetService("Players"),game:GetService("RunService"),game:GetService("UserInputService"),game:GetService("TweenService"),game:GetService("Lighting"),game:GetService("HttpService")
 local LP = Players.LocalPlayer
 local NS,CS = 60,30
